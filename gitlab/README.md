@@ -29,7 +29,7 @@ Follow the instructions <a target="_blank" href="https://docs.gitlab.com/ee/admi
 
 | Target                                                                                                                                                     | Default Port | Path       |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------|
-| <a target="_blank" href="https://docs.gitlab.com/ee/administration/gitaly/#doc-nav">gitaly</a>                                                            | 9236         | /metrics   |
+| <a target="_blank" href="https://docs.gitlab.com/ee/administration/gitaly/#doc-nav">gitaly</a>                                                             | 9236         | /metrics   |
 | <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html">gitlab-sidekiq</a>                                    | 8082         | /metrics   |
 | <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html#unicorn-metrics-available">gitlab-unicorn</a> | 8080         | /-/metrics |
 | <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html">gitlab-workhorse</a>                                  | 9229         | /metrics   |
