@@ -44,6 +44,33 @@ Follow the instructions <a target="_blank" href="https://docs.gitlab.com/ee/admi
 | <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/redis_exporter.html">redis</a>                                    | 9121         | /metrics   |
 | <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html">gitlab-runner</a>                                     | 9252         | /metrics   |
 
+GitLab Prometheus exporters, Nginx and GitLab Runner must be configured to listen to IP address(es) that include the IP address of the host or docker container of the SignalFx Smart Agent. For example, the configuration below in `/etc/gitlab/gitlab.rb` configures the GitLab Postgres Prometheus exporter to allow network connections on port `9187` from any IP address. 
+```
+postgres_exporter['listen_address'] = '0.0.0.0:9187'
+```
+The above configuration can also be written as:
+```
+postgres_exporter['listen_address'] = ':9187'
+```
+
+Below is part of file `/var/opt/gitlab/nginx/conf/nginx-status.conf` showing the `location /metrics` block for metric related configuration. This file configures Nginx. The statement `allow 172.17.0.0/16;` allows network connection in the `172.17.0.0/16` IP range. The assumption is that the IP address associated with the SignalFx Smart Agent is in that IP range.
+```
+server {
+    ...
+    location /metrics {
+    ...
+    allow 172.17.0.0/16;
+    deny all;
+    }
+}
+```
+
+Below is part of the global section of `/etc/gitlab-runner/config.toml`. This file configures GitLab Runner. The statement below configures GitLab Runner's Prometheus metrics HTTP server to allows network connection on port `9252` from any IP address.
+```
+listen_address = "0.0.0.0:9252"
+...
+```
+
 #### Smart Agent Configuration
 
 Find and edit the SignalFx Smart Agent configuration file `agent.yaml` to configure <a target="_blank" href="https://github.com/signalfx/signalfx-agent/blob/master/docs/monitors/prometheus-exporter.md">prometheus-exporter</a> monitors for the Prometheus endpoint targets. For example, you can define a prometheus-exporter monitor per endpoint target as shown below. Though verbose, it is the only way to configure metricPath, extraDimension, metricsToExclude etc per endpoint target. 
@@ -143,26 +170,8 @@ Sample of built-in dashboard in SignalFx:
 
 Configuring GitLab by editing `/etc/gitlab/gitlab.rb` should be accompanied by running the command `gitlab-ctl reconfigure` in order for the changes to take effect.
 
-The GitLab Prometheus exporters should be configured to listen to IP address(es) that include the IP address of the host or docker container of the SignalFx Smart Agent. The example below shows two ways of configuring the GitLab Postgres Prometheus exporter to listen for network connections on port 9187 and allow connections from any IP address. 
-```
-postgres_exporter['listen_address'] = '0.0.0.0:9187'
 
-                       or
-
-postgres_exporter['listen_address'] = ':9187'
-```
-
-Separate from the GitLab Prometheus exporters, Nginx needs to be configured to allow network connection from the SignalFx Smart Agent. For example, in a docker environment where you have the SignalFx Smart Agent and GitLab containers in the same network, say `172.17.0.0/16`, you should add line `allow 172.17.0.0/16;` to the `location /metrics` block in `/var/opt/gitlab/nginx/conf/nginx-status.conf` file as shown below. You should then run the command `gitlab-ctl restart`. Note that any subsequent executions of the command `gitlab-ctl reconfigure` will restore the original `/var/opt/gitlab/nginx/conf/nginx-status.conf` and erase your changes. 
-```
-server {
-    ...
-    location /metrics {
-    ...
-    allow 172.17.0.0/16;
-    deny all;
-    }
-}
-```
+Nginx configuration by editing file `/var/opt/gitlab/nginx/conf/nginx-status.conf` for instance, should be accompanied by running command `gitlab-ctl restart`. Note that changes to the configuration file `/var/opt/gitlab/nginx/conf/nginx-status.conf` in particular are erased by subsequent runs of command `gitlab-ctl reconfigure` because `gitlab-ctl reconfigure` restores the original configuration file. 
 
 ### METRICS
 
