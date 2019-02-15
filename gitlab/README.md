@@ -22,10 +22,14 @@ GitLab is an open-source web-based git repository manager developed by GitLab In
 
 Install the latest version of the SignalFx Smart Agent for your environment as described [here](https://github.com/signalfx/signalfx-agent#installation).
 
+Note that configuring GitLab by editing `/etc/gitlab/gitlab.rb` should be accompanied by running the command `gitlab-ctl reconfigure` in order for the changes to take effect.
+
+Also, Nginx configuration by editing file `/var/opt/gitlab/nginx/conf/nginx-status.conf` for instance, should be accompanied by running command `gitlab-ctl restart`. Note that changes to the configuration file `/var/opt/gitlab/nginx/conf/nginx-status.conf` in particular are erased by subsequent runs of command `gitlab-ctl reconfigure` because `gitlab-ctl reconfigure` restores the original configuration file. 
+
 ### CONFIGURATION
 #### GitLab Configuration
 
-Follow the instructions <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html">here</a> to configure the GitLab's Prometheus exporters to expose metric endpoint targets. For GitLab Runner monitoring configuration go <a target="_blank" href="https://docs.gitlab.com/runner/monitoring/README.html">here</a>. Below is a list of some of the Prometheus endpoint targets with links to their respective configuration pages. Note that target gitlab_monitor metrics are just targets gitlab_monitor_database, gitlab_monitor_process and gitlab_monitor_sidekiq metrics combined.
+Follow the instructions <a target="_blank" href="https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html">here</a> to configure the GitLab's Prometheus exporters to expose metric endpoint targets. For GitLab Runner monitoring configuration go <a target="_blank" href="https://docs.gitlab.com/runner/monitoring/README.html">here</a>. Below is a list of some of the Prometheus endpoint targets with links to their respective configuration pages. Note that target `gitlab_monitor` metrics are just targets `gitlab_monitor_database`, `gitlab_monitor_process` and `gitlab_monitor_sidekiq` metrics combined.
 
 | Target                                                                                                                                                     | Default Port | Path       |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------|
@@ -155,7 +159,6 @@ monitors:
 ...
 ```
 
-
 ### USAGE
 
 Sample of built-in dashboard in SignalFx:
@@ -166,16 +169,9 @@ Sample of built-in dashboard in SignalFx:
 
 ![Embedded PostgreSQL](./img/gitlab_embedded_postgresql_dashboard.png)
 
-#### Important conditions to watch out for
-
-Configuring GitLab by editing `/etc/gitlab/gitlab.rb` should be accompanied by running the command `gitlab-ctl reconfigure` in order for the changes to take effect.
-
-
-Nginx configuration by editing file `/var/opt/gitlab/nginx/conf/nginx-status.conf` for instance, should be accompanied by running command `gitlab-ctl restart`. Note that changes to the configuration file `/var/opt/gitlab/nginx/conf/nginx-status.conf` in particular are erased by subsequent runs of command `gitlab-ctl reconfigure` because `gitlab-ctl reconfigure` restores the original configuration file. 
-
 ### METRICS
 
-For documentation of the metrics and dimensions emitted:
+For documentation of the metrics and dimensions emitted per metrics endpoint:
 
 [gitaly](./docs/gitaly)
 

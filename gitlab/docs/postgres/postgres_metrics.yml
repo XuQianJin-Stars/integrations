@@ -88,6 +88,8 @@
 - title: go_threads
   type: gauge
   description: Number of OS threads created.
+
+
 - title: pg_exporter_last_scrape_duration_seconds
   type: gauge
   description: Duration of the last scrape of metrics from PostgresSQL.
@@ -811,6 +813,7 @@
 - title: pg_vacuum_queries
   type: gauge
   description: The current number of VACUUM queries
+
 - title: process_cpu_seconds_total
   type: counter
   description: Total user and system CPU time spent in seconds.
