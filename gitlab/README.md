@@ -171,29 +171,7 @@ Sample of built-in dashboard in SignalFx:
 
 ### METRICS
 
-For documentation of the metrics and dimensions emitted per metrics endpoint:
-
-[gitaly](./docs/gitaly)
-
-[gitlab-monitor](./docs/monitor)
-
-[nginx](./docs/nginx)
-
-[node](./docs/node)
-
-[postgres](./docs/postgres)
-
-[prometheus](./docs/prometheus)
-
-[redis](./docs/redis)
-
-[sidekiq](./docs/sidekiq)
-
-[unicorn](./docs/unicorn)
-
-[workhorse](./docs/workhorse)
-
-[runner](./docs/runner)
+For documentation of the metrics emitted, [click here](./docs).
 
 ### LICENSE
 
